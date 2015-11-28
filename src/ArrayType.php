@@ -217,6 +217,28 @@ class ArrayType extends ComplexType
         $this->class->addFunction($rewind);
     }
 
+    protected function implementCountable()
+    {
+        $this->class->addImplementation('Countable');
+        $description = 'Countable implementation';
+
+        $countDock = new PhpDocComment();
+        $countDock->setDescription($description);
+        $countDock->setReturn(PhpDocElementFactory::getReturn($this->arrayOf, 'Return count of elements'));
+        $count = new PhpFunction(
+            'public',
+            'count',
+            $this->buildParametersString(
+                array(),
+                false,
+                false
+            ),
+            '  return count($this->' . $this->field->getName() . ');',
+            $countDock
+        );
+        $this->class->addFunction($count);
+    }
+
     protected function implementArrayAccessAndIterator()
     {
         $members = array_values($this->members);
@@ -225,5 +247,6 @@ class ArrayType extends ComplexType
 
         $this->implementArrayAccess();
         $this->implementIterator();
+        $this->implementCountable();
     }
 }
