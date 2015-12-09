@@ -186,7 +186,7 @@ class ArrayType extends ComplexType
 
         $validDock = new PhpDocComment();
         $validDock->setDescription($description);
-        $validDock->setReturn(PhpDocElementFactory::getReturn('string|null', 'Return the valid of the current element or null'));
+        $validDock->setReturn(PhpDocElementFactory::getReturn('boolean', 'Return the validity of the current position'));
         $valid = new PhpFunction(
             'public',
             'valid',
@@ -201,7 +201,7 @@ class ArrayType extends ComplexType
         $this->class->addFunction($valid);
 
         $rewindDock = new PhpDocComment();
-        $rewindDock->setDescription($description . PHP_EOL . 'Checks if current position is valid');
+        $rewindDock->setDescription($description . PHP_EOL . 'Rewind the Iterator to the first element');
         $rewindDock->setReturn(PhpDocElementFactory::getReturn('void', ''));
         $rewind = new PhpFunction(
             'public',
