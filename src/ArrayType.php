@@ -195,7 +195,7 @@ class ArrayType extends ComplexType
                 false,
                 false
             ),
-            '  return $this->key() != null;',
+            '  return $this->key() !== null;',
             $validDock
         );
         $this->class->addFunction($valid);
