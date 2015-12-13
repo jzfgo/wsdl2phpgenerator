@@ -66,7 +66,7 @@ class ArrayType extends ComplexType
                 false,
                 false
             ),
-            '  return isset($this->' . $this->field->getName() . ');',
+            '  return isset($this->' . $this->field->getName() . '[$offset]);',
             $offsetExistsDock
         );
         $this->class->addFunction($offsetExists);

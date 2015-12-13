@@ -63,9 +63,9 @@ class NaicsTest extends FunctionalTestCase
      */
     protected function checkArray($arrayClass, $array)
     {
-        $this->assertTrue($arrayClass instanceof \ArrayAccess);
-        $this->assertTrue($arrayClass instanceof \Iterator);
-        $this->assertTrue($arrayClass instanceof \Countable);
+        $this->assertClassImplementsInterface($arrayClass, 'ArrayAccess');
+        $this->assertClassImplementsInterface($arrayClass, 'Iterator');
+        $this->assertClassImplementsInterface($arrayClass, 'Countable');
 
         $this->assertEquals(count($arrayClass), count($array));
 
