@@ -173,6 +173,28 @@ class ComplexType extends Type
             $accessors[] = $setter;
         }
 
+        // JsonSerializable implementation
+        $jsonSerializeComment = new PhpDocComment();
+        $jsonSerializeComment->setDescription('JsonSerializable implementation');
+        $jsonSerializeComment->setReturn(PhpDocElementFactory::getReturn('array', ''));
+
+        $jsonSerializeCode = '  return array(' . PHP_EOL;
+        foreach ($this->members as $member) {
+            $memberName = Validator::validateAttribute($member->getName());
+            $getterName = 'get' . ucfirst($name);
+            $jsonSerializeCode .= "    '{$memberName}' => \$this->{$getterName}()," . PHP_EOL;
+        }
+        $jsonSerializeCode .= '  );' . PHP_EOL;
+
+        $jsonSerialize = new PhpFunction(
+            'public',
+            'jsonSerialize',
+            '',
+            $jsonSerializeCode,
+            $jsonSerializeComment
+        );
+
+        // Generate the constructor
         $constructor = new PhpFunction(
             'public',
             '__construct',
@@ -185,6 +207,9 @@ class ComplexType extends Type
             $constructorComment
         );
         $this->class->addFunction($constructor);
+
+        $this->class->addImplementation('\JsonSerializable');
+        $this->class->addFunction($jsonSerialize);
 
         foreach ($accessors as $accessor) {
             $this->class->addFunction($accessor);

@@ -214,6 +214,35 @@ class ComplexTypeTest extends CodeGenerationTestCase
         $this->assertNull($object->getADateTime());
     }
 
+    /**
+     * Test JsonSerializable implementation
+     */
+    public function testJsonSerializable()
+    {
+        $testClassName = 'ComplexTypeJsonSerializableTestClass';
+
+        // Add a mostly dummy configuration. We are not going to read or write any files here.
+        // The important part is the accessors part.
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'constructorParamsDefaultToNull' => true,
+        ));
+        $complexType = new ComplexType($config, $testClassName);
+        $complexType->addMember('string', 'Dummy', false);
+
+        $this->generateClass($complexType);
+
+        $this->assertClassExists($testClassName);
+
+        $this->assertClassImplementsInterface($testClassName, 'JsonSerializable');
+        $this->assertClassHasMethod($testClassName, 'jsonSerialize');
+
+        $object = new \ComplexTypeJsonSerializableTestClass();
+        $class = new \ReflectionClass($object);
+        $this->assertMethodHasReturnType($class->getMethod('jsonSerialize'), 'array');
+    }
+
 
     /**
      * Sets object property value using reflection.
