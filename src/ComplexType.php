@@ -181,7 +181,7 @@ class ComplexType extends Type
         $jsonSerializeCode = '  return array(' . PHP_EOL;
         foreach ($this->members as $member) {
             $memberName = Validator::validateAttribute($member->getName());
-            $getterName = 'get' . ucfirst($name);
+            $getterName = 'get' . ucfirst($memberName);
             $jsonSerializeCode .= "    '{$memberName}' => \$this->{$getterName}()," . PHP_EOL;
         }
         $jsonSerializeCode .= '  );' . PHP_EOL;
